@@ -16,7 +16,7 @@ Launch the development server that will restart on each code change. Docker Comp
 $ docker-compose up --build
 ```
 
-If everything went well, open the API emulator frontend by directing your browser to http://localhost:4004.
+If everything went well, open the API emulator frontend by directing your browser to http://localhost:4004. This creates a new installation (with the name `0`) and redirects the browser to show the app UI for the newly created installation. Note that the installation id that the *app* sees is a random UUID, separate from the installation name visible in the browser.
 
 ### Running the Collector in Development
 
