@@ -2,11 +2,11 @@ version: "3.7"
 
 services:
   emulator:
-    image: ghcr.io/badrap/emulator:v0.8.4
+    image: ghcr.io/badrap/emulator:v0.9.1
     environment:
       APP_URL: http://app:5000/app
     ports:
-      - "4004:4004"
+      - "127.0.0.1:4004:4004"
 
   app:
     build:
@@ -20,4 +20,4 @@ services:
       API_URL: http://emulator:4004/api
       API_TOKEN: 111111111-2222-3333-44444-555555555555
     ports:
-      - "5000:5000"
+      - "127.0.0.1:5000:5000"
