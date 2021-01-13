@@ -1,5 +1,11 @@
 # Python Example App
 
+A small Python-based example of how to create a Badrap app that:
+
+- Offers an UI to display the state of an installation.
+- Updates the state of an installation based on UI input.
+- Collects the assets of the owner of the installation (i.e. the user that has installed the app).
+
 ## Development
 
 **Note**: The development environment works on MacOS and Linux. You may encounter problems with Windows.
