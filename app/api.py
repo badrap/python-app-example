@@ -75,5 +75,4 @@ def update_state(installation_id, updater, *args, **kwargs):
 def list_assets(installation_id):
     res = api_request(
         "GET", f"/app/installations/{installation_id}/owner/assets")
-    print(res.text)
     return res.json()
