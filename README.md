@@ -18,6 +18,35 @@ If everything went well, open the API emulator frontend by directing your browse
 docker-compose run --rm app python -m app.collector
 ```
 
+#### Feeding Test Data for the Collector
+
+You can use the `/i/{name}/external_assets` endpoints to feed external assets
+for an installation (`{name}` is the installation name visible in your
+browser location bar, e.g. `0`).
+
+"External assets" in this context mean assets that the app itself hasn't
+created - e.g. assets that a Badrap user would have manually claimed.
+
+Add an external asset while the emulator is running for the installation name `0`:
+
+```sh
+curl -H "Content-Type: application/json" -d '{ "type": "ip", "value": "1.2.3.4" }' http://localhost:4040/i/0/external_assets
+```
+
+Possible values for key `"type"` are `"ip"`, `"domain"` and `"email"`. The value for key `"value"` has to be an IPv4/6 address, a domain name or an email address, respectively.
+
+To list all external assets:
+
+```sh
+curl http://localhost:4040/i/0/external_assets
+```
+
+To delete a certain external asset with the id `{id}`:
+
+```sh
+curl -X DELETE http://localhost:4040/i/0/external_assets/{id}
+```
+
 ## Production
 
 ### Building for Production
