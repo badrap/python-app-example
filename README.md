@@ -31,7 +31,7 @@ for an installation (`{name}` is the installation name visible in your
 browser location bar, e.g. `0`).
 
 "External assets" in this context mean assets that the app itself hasn't
-created - e.g. assets that a Badrap user would have manually claimed.
+created - e.g. assets that a Badrap user would have manually claimed. External assets aren't currently visible in the emulator, and they're only accessible & modifiable through APIs.
 
 Add an external asset while the emulator is running for the installation name `0`:
 
