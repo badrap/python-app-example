@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   emulator:
-    image: ghcr.io/badrap/emulator:v0.9.2
+    image: ghcr.io/badrap/emulator:v0.9.4
     environment:
       APP_URL: http://app:5000/app
     ports:
