@@ -1,4 +1,5 @@
 import os
+import json
 import urllib
 import requests
 
@@ -74,5 +75,29 @@ def update_state(installation_id, updater, *args, **kwargs):
 
 def list_assets(installation_id):
     res = api_request(
-        "GET", f"/app/installations/{installation_id}/owner/assets")
+        "GET",
+        f"/app/installations/{installation_id}/owner/assets"
+    )
     return res.json()
+
+
+def ensure_feed_exists(feed_id, name, title=None, summary_template=None, details_template=None):
+    res = api_request(
+        "PUT",
+        f"/app/feeds/{feed_id}",
+        json={
+            "name": name,
+            "title": title,
+            "summaryTemplate": summary_template,
+            "detailsTemplate": details_template
+        }
+    )
+
+
+def send_events_for_installation(installation_id, feed_id, events):
+    event_lines = "\n".join(json.dumps(e) for e in events)
+    res = api_request(
+        "POST",
+        f"/app/installations/{installation_id}/feeds/{feed_id}/events",
+        data=event_lines
+    )

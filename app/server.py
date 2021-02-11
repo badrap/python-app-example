@@ -2,6 +2,7 @@ import re
 from flask import Flask, request, abort, jsonify
 from . import api
 
+
 def get_bearer_token():
     auth = request.headers.get("Authorization", "")
     match = re.match(r"^Bearer\s+([a-z0-9-._~+/]+=*)$", auth, re.I)
@@ -10,7 +11,7 @@ def get_bearer_token():
 
 def do_update(installation_state, client_state):
     installation_state["name"] = client_state["name"]
-    installation_state["checked"] = client_state["checked"]
+    installation_state["include_timestamps"] = client_state["include_timestamps"]
     return installation_state
 
 
@@ -28,25 +29,28 @@ def create_app():
             abort(403)
         installation_id = token_info["installationId"]
 
-        payload = request.json.get("payload", {})
-        action = payload.get("action")
-        client_state = payload.get("clientState", {})
+        action = request.json.get("action")
+        client_state = request.json.get("clientState", {})
         if action == "update":
-            installation_state = api.update_state(installation_id, do_update, client_state)
+            installation_state = api.update_state(
+                installation_id,
+                do_update,
+                client_state
+            )
         else:
             installation_state = api.get_state(installation_id)
 
         return jsonify([
             {
-                # Box is a basic layout element that accepts (almost) any TailwindCSS class.
-                "type": "Box",
+                # ui-box is a basic layout element that accepts (almost) any TailwindCSS class.
+                "type": "ui-box",
                 "props": {
                     "class": "w-full mb-2"
                 },
                 "children": [
                     "Name",
                     {
-                        "type": "TextField",
+                        "type": "ui-text-field",
                         "props": {
                             # The field value is sent in clientState.name
                             # when the submit button is clicked.
@@ -61,24 +65,24 @@ def create_app():
                 ]
             },
             {
-                "type": "Box",
+                "type": "ui-box",
                 "props": {
                     "class": "w-full mb-2"
                 },
                 "children": [
-                    "Checked",
                     {
-                        "type": "Checkbox",
+                        "type": "ui-switch",
                         "props": {
-                            "name": "checked",
-                            "checked": installation_state.get("checked", False)
+                            "name": "include_timestamps",
+                            "label": "Include timestamps to events",
+                            "checked": installation_state.get("include_timestamps", False)
                         }
                     }
                 ]
             },
             {
 
-                "type": "Button",
+                "type": "ui-button",
                 "props": {
                     # Automatically act as a submit button for the enclosing form
                     # (the whole UI is also implicitly a form).
@@ -96,6 +100,5 @@ def create_app():
                 ]
             }
         ])
-
 
     return app
