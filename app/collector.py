@@ -1,14 +1,12 @@
 import json
-import datetime
+from datetime import datetime
 from . import api
 
 
-def main(feed_id="0"):
+def main():
     api.ensure_feed_exists(
-        # Internal id for the feed, required
-        feed_id,
-        # Public name for the feed, required
-        name="ip2-events",
+        # URL-safe name for the feed, required
+        name="ip-events",
         # Public title for the feed
         title="IP events",
         # Public short description of the feed/event
@@ -28,7 +26,13 @@ def main(feed_id="0"):
                 "children": [
                     "This is the first paragraph of the detailed event description. ",
                     "We can use phrasing content here as well, or show a ",
-
+                    {
+                        "type": "a",
+                        "props": {
+                            "href": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                        },
+                        "children": ["reference link"]
+                    },
                     "."
                 ],
             },
@@ -64,7 +68,7 @@ def main(feed_id="0"):
 
         event_props = {}
         if state.get("include_timestamps"):
-            event_props["timestamp"] = datetime().isoformat()
+            event_props["timestamp"] = datetime.now().isoformat()
 
         events = []
         for item in api.list_assets(installation_id):
@@ -85,7 +89,7 @@ def main(feed_id="0"):
 
         # Send the events, ensuring that only the owner of this specific
         # installation can see them.
-        api.send_events_for_installation(installation_id, feed_id, events)
+        api.send_events_for_installation(installation_id, "ip-events", events)
 
 
 if __name__ == "__main__":

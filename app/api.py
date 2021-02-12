@@ -81,23 +81,35 @@ def list_assets(installation_id):
     return res.json()
 
 
-def ensure_feed_exists(feed_id, name, title=None, summary_template=None, details_template=None):
+def ensure_feed_exists(name, title=None, summary_template=None, details_template=None):
     res = api_request(
-        "PUT",
-        f"/app/feeds/{feed_id}",
+        "POST",
+        f"/app/feeds",
         json={
             "name": name,
             "title": title,
             "summaryTemplate": summary_template,
             "detailsTemplate": details_template
-        }
+        },
+        raise_for_status=False
     )
+    if res.status_code == 409:
+        res = api_request(
+            "PATCH",
+            f"/app/feeds/{name}",
+            json={
+                "title": title,
+                "summaryTemplate": summary_template,
+                "detailsTemplate": details_template
+            }
+        )
+    res.raise_for_status()
 
 
-def send_events_for_installation(installation_id, feed_id, events):
+def send_events_for_installation(installation_id, feed_name, events):
     event_lines = "\n".join(json.dumps(e) for e in events)
     res = api_request(
         "POST",
-        f"/app/installations/{installation_id}/feeds/{feed_id}/events",
+        f"/app/installations/{installation_id}/feeds/{feed_name}/events",
         data=event_lines
     )
