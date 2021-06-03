@@ -88,8 +88,8 @@ def ensure_feed_exists(name, title=None, summary_template=None, details_template
         json={
             "name": name,
             "title": title,
-            "summaryTemplate": summary_template,
-            "detailsTemplate": details_template
+            "summary_template": summary_template,
+            "details_template": details_template
         },
         raise_for_status=False
     )
@@ -97,19 +97,19 @@ def ensure_feed_exists(name, title=None, summary_template=None, details_template
         res = api_request(
             "PATCH",
             f"/app/feeds/{name}",
+            headers={"If-Match": "*"},
             json={
                 "title": title,
-                "summaryTemplate": summary_template,
-                "detailsTemplate": details_template
+                "summary_template": summary_template,
+                "details_template": details_template
             }
         )
     res.raise_for_status()
 
 
 def send_events_for_installation(installation_id, feed_name, events):
-    event_lines = "\n".join(json.dumps(e) for e in events)
     res = api_request(
         "POST",
         f"/app/installations/{installation_id}/feeds/{feed_name}/events",
-        data=event_lines
+        json=events
     )

@@ -27,10 +27,10 @@ def create_app():
         token_info = api.get_token_info(token)
         if not token_info:
             abort(403)
-        installation_id = token_info["installationId"]
+        installation_id = token_info["installation_id"]
 
         action = request.json.get("action")
-        client_state = request.json.get("clientState", {})
+        client_state = request.json.get("client_state", {})
         if action == "update":
             installation_state = api.update_state(
                 installation_id,
@@ -52,7 +52,7 @@ def create_app():
                     {
                         "type": "ui-text-field",
                         "props": {
-                            # The field value is sent in clientState.name
+                            # The field value is sent in client_state.name
                             # when the submit button is clicked.
                             "name": "name",
                             # The text field needs to have a value for
